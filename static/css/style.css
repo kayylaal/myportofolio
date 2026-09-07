@@ -318,6 +318,107 @@ img.project-thumb {
     padding: 0 1rem;
 }
 
+/* social works buat foto-foto yang digantung kayak di tali jemuran gt */
+.socials {
+    background: var(--bubble_pink);
+    overflow: hidden;
+    padding: 6rem 0 7rem;
+}
+
+.socials-inner {
+    max-width: 100%;
+}
+
+.section-title-right {
+    text-align: right;
+}
+
+.socials-track {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.socials-track::-webkit-scrollbar {
+    display: none;
+}
+
+.socials-rail {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    width: max-content;
+    padding: 3rem 3rem 3.5rem;
+}
+
+/* garis talinya sengaja pake span bkn div, soalnya kalo div nanti kehitung jadi anak ke-1 dan bikin urutan label atas-bawahnya jadi kebalik semua */
+.socials-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    background: var(--heading);
+}
+
+.polaroid {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(220px, 22vw, 340px);
+    z-index: 1;
+}
+
+.polaroid:nth-of-type(odd) {
+    transform: rotate(-3.43deg);
+}
+
+.polaroid:nth-of-type(even) {
+    transform: rotate(3.43deg);
+}
+
+.polaroid-photo {
+    width: 100%;
+    aspect-ratio: 3 / 4.2;
+    object-fit: cover;
+    display: block;
+    box-shadow: 8px 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* label nama social works, sama kayak project gantian atas-bawah nempel foto */
+.polaroid-tag {
+    position: absolute;
+    left: -0.9rem;
+    z-index: 2;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    padding: 10px 20px;
+    white-space: nowrap;
+}
+
+.polaroid:nth-of-type(odd) .polaroid-tag {
+    top: -1.3rem;
+}
+
+.polaroid:nth-of-type(even) .polaroid-tag {
+    bottom: -1.3rem;
+}
+
+.socials-more {
+    flex: 0 0 auto;
+    align-self: center;
+    transform: translateY(-1.8rem);
+    color: var(--muted);
+    font-size: 1.1rem;
+    white-space: nowrap;
+    padding-left: 1rem;
+    z-index: 1;
+}
+
 @media (max-width: 800px) {
     /* khusus layar hp, semua yang di bawah ini nimpa yang atas */
 /* hero buat tampilan awal (Kayla - foto - Ali) */
@@ -439,5 +540,17 @@ img.project-thumb {
     }
     .project-card:nth-child(even) {
         transform: translateY(1.5rem);
+    }
+    .socials-rail {
+        gap: 2.5rem;
+        padding: 2.5rem 1.5rem 3rem;
+    }
+/* foto polaroidnya miringnya ganjil -3.43 genap +3.43 */
+.polaroid {
+        width: min(62vw, 260px);
+    }
+    .projects-more,
+    .socials-more {
+        font-size: 1rem;
     }
 }
