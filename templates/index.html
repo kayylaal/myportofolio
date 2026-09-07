@@ -3,59 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayla - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Portfolio of Kayla Ali, Information Systems student at Universitas Indonesia.">
+    <title>Kayla Ali</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <a href="#profile" class="brand">Kayla</a>
-            <nav>
-                <a href="#profile">Profile</a>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Information Systems &middot; Universitas Indonesia</p>
-                    <h1>Kayla Kirana Ali Trimardhany</h1>
+<main>
+    <section class="hero" id="profile">
+        <div class="container hero-stage">
+            <div class="hero-layout">
+                <div class="hero-col hero-col-left">
+                    <!-- ini h1nya cuma satu aja buat nama lengkap "Kayla Ali" biar struktur headingnya bener, yang "Ali" di kanan itu cuma span hiasan aja, disembunyiin dari screen reader biar ga kebaca dua kali -->
+                    <h1 class="hero-name hero-name-left" aria-label="Kayla Ali">Kayla</h1>
+                    <p class="bio">Second year information Systems student<br>at University of Indonesia.</p>
+                    <p class="tagline">I design, code, and have fun!</p>
                 </div>
                 <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/Kayla.jpg" alt="Photo of Kayla">
+                    <img class="avatar" src="/static/img/Kayla_1.png" alt="Photo of Kayla" fetchpriority="high">
                 </div>
-                <div class="hero-details">
-                    <p class="bio">IS student at Universitas Indonesia just having fun.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>2506603854</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
-                        </div>
-                    </dl>
+                <div class="hero-col hero-col-right">
+                    <span class="hero-name hero-name-right" aria-hidden="true">Ali</span>
+                    <!-- tombol tombol link -->
                     <div class="social-links">
-                        <a href="https://github.com/kayylaal" class="social-link">GitHub</a>
+                        <a href="https://github.com/kayylaal" class="social-link">Github</a>
                         <a href="https://www.linkedin.com/in/kayla-kirana-ali-trimardhany/" class="social-link">LinkedIn</a>
-                        <a href="mailto:kaylakiranali11@gmail.com" class="social-link">Email</a>
+                        <a href="mailto:kaylakiranali11@gmail.com" class="social-link">Email me!</a>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 Kayla. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
-    </footer>
+    </section>
+</main>
 </body>
 </html>
