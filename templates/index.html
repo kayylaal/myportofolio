@@ -8,7 +8,23 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+    <!-- navbar, isinya logo hati sama nama sama tombol menu -->
+    <header class="site-header">
+        <div class="container">
+            <a href="#profile" class="brand">
+                <img class="brand-heart" src="/static/img/heart.png" alt="Pixel heart">
+                <span>Kayla Ali</span>
+            </a>
+            <nav>
+                <a href="#profile">Profile</a>
+                <a href="#projects">Projects</a>
+                <a href="#socials">Social works</a>
+            </nav>
+        </div>
+    </header>
+
 <main>
+    <!-- hero, tulisan Kayla - foto - Ali -->
     <section class="hero" id="profile">
         <div class="container hero-stage">
             <div class="hero-layout">
@@ -34,6 +50,8 @@
 
         </div>
     </section>
+
+    <!-- section projects, cardsnya discroll ke samping -->
     <section class="projects" id="projects">
         <div class="projects-inner">
             <div class="section-head">
@@ -86,6 +104,8 @@
             </div>
         </div>
     </section>
+
+    <!-- bagian social works, fotonya digantung di tali jemuran gitu -->
     <section class="socials" id="socials">
         <div class="socials-inner">
             <div class="section-head">
@@ -123,5 +143,35 @@
         </div>
     </section>
 </main>
+
+    <!-- footer, ada ikcon2 sosmed sama gambar kelinci :> -->
+    <footer class="collab-footer">
+        <div class="collab-inner">
+            <div class="collab-left">
+                <h2 class="collab-title">Let's Collab!</h2>
+                <div class="collab-icons">
+                    <a href="https://github.com/kayylaal" aria-label="GitHub">
+                        <img src="/static/img/github.png" alt="GitHub" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://line.me/ti/p/U0RPewow1G" aria-label="LINE">
+                        <img src="/static/img/line.png" alt="LINE" loading="lazy" decoding="async">
+                    </a>
+                    <a href="mailto:kaylakiranali11@gmail.com" aria-label="Email">
+                        <img src="/static/img/mail.png" alt="Email" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://www.instagram.com/kayylaal/" aria-label="Instagram">
+                        <img src="/static/img/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://www.linkedin.com/in/kayla-kirana-ali-trimardhany/" aria-label="LinkedIn">
+                        <img src="/static/img/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+                    </a>
+                </div>
+                <p class="collab-copy">@2026 Kayla Ali -- please hit me up!! ♥︎</p>
+            </div>
+            <div class="collab-right">
+                <img class="collab-heart" src="/static/img/bunnies.png" alt="Pixel bunnies" loading="lazy" decoding="async">
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
