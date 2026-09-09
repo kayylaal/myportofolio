@@ -4,21 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio of Kayla Ali, Information Systems student at Universitas Indonesia.">
-    <title>Kayla Ali</title>
+    <title>{{ name }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <!-- navbar, isinya logo hati sama nama sama tombol menu -->
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">
-                <img class="brand-heart" src="/static/img/heart.png" alt="Pixel heart">
-                <span>Kayla Ali</span>
-            </a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <nav>
-                <a href="#profile">Profile</a>
-                <a href="#projects">Projects</a>
-                <a href="#socials">Social works</a>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -30,12 +26,12 @@
             <div class="hero-layout">
                 <div class="hero-col hero-col-left">
                     <!-- ini h1nya cuma satu aja buat nama lengkap "Kayla Ali" biar struktur headingnya bener, yang "Ali" di kanan itu cuma span hiasan aja, disembunyiin dari screen reader biar ga kebaca dua kali -->
-                    <h1 class="hero-name hero-name-left" aria-label="Kayla Ali">Kayla</h1>
-                    <p class="bio">Second year information Systems student<br>at University of Indonesia.</p>
+                    <h1>{{ name }}</h1>
+                    <p class="bio">{{ bio }}</p>
                     <p class="tagline">I design, code, and have fun!</p>
                 </div>
                 <div class="hero-photo">
-                    <img class="avatar" src="/static/img/Kayla_1.png" alt="Photo of Kayla" fetchpriority="high">
+                    <img class="avatar" src="/static/img/Kayla_1.png" alt="Photo of {{ name }}">
                 </div>
                 <div class="hero-col hero-col-right">
                     <span class="hero-name hero-name-right" aria-hidden="true">Ali</span>
@@ -166,7 +162,7 @@
                         <img src="/static/img/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
                     </a>
                 </div>
-                <p class="collab-copy">@2026 Kayla Ali -- please hit me up!! ♥︎</p>
+                <p>&copy; @2026 {{ name }} -- please hit me up!! ♥︎</p>
             </div>
             <div class="collab-right">
                 <img class="collab-heart" src="/static/img/bunnies.png" alt="Pixel bunnies" loading="lazy" decoding="async">
