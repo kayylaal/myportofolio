@@ -16,12 +16,3 @@ class SocialWork(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Experience(models.Model):
-    organization_name = models.CharField(max_length=255)
-    organization_logo = models.URLField(blank=True, null=True)
-    role = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"{self.role} at {self.organization_name}"

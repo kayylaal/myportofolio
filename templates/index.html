@@ -137,21 +137,6 @@
             </div>
         </div>
     </section>
-    <!-- bagian experience, basic dulu -->
-    <section class="experience" id="experience">
-        <h2>Experience</h2>
-        {% for exp in experiences %}
-        <div>
-            {% if exp.organization_logo %}
-            <img src="{{ exp.organization_logo }}" alt="{{ exp.organization_name }}">
-            {% endif %}
-            <p>{{ exp.organization_name }}</p>
-            <p>{{ exp.role }}</p>
-        </div>
-        {% empty %}
-        <p>Belum ada experience.</p>
-        {% endfor %}
-    </section>
 </main>
 
     <!-- footer, ada ikcon2 sosmed sama gambar kelinci :> -->
