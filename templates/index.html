@@ -14,7 +14,6 @@
             <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
-                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -137,6 +136,21 @@
                 </div>
             </div>
         </div>
+    </section>
+    <!-- bagian experience, basic dulu -->
+    <section class="experience" id="experience">
+        <h2>Experience</h2>
+        {% for exp in experiences %}
+        <div>
+            {% if exp.organization_logo %}
+            <img src="{{ exp.organization_logo }}" alt="{{ exp.organization_name }}">
+            {% endif %}
+            <p>{{ exp.organization_name }}</p>
+            <p>{{ exp.role }}</p>
+        </div>
+        {% empty %}
+        <p>Belum ada experience.</p>
+        {% endfor %}
     </section>
 </main>
 
