@@ -9,6 +9,8 @@ def show_main(request):
         "bio": (
             "Second year information Systems student at University of Indonesia."
         ),
+        "projects": Project.objects.all(),
+        "social_works": SocialWork.objects.all(),
     }
     return render(request, "index.html", context)
 

@@ -11,7 +11,10 @@
     <!-- navbar, isinya logo hati sama nama sama tombol menu -->
     <header class="site-header">
         <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+            <a href="{% url 'main:show_main' %}" class="brand">
+                <img class="brand-heart" src="/static/img/heart.png" alt="">
+                {{ name }}
+            </a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experiences' %}">Experiences</a>
@@ -30,20 +33,24 @@
             <!-- section projects yang pake mvt -->
             <div class="projects-track" id="projectsTrack">
                 {% for project in projects %}
-                {% if project.link %}
-                <a class="project-card" href="{{ project.link }}">
-                    {% else %}
-                    <div class="project-card">
-                        {% endif %}
+                <div class="project-card">
+                    <div class="project-card-inner">
                         {% if project.thumbnail %}
                         <img class="project-thumb" loading="lazy" decoding="async" src="{{ project.thumbnail }}" alt="{{ project.title }}">
                         {% endif %}
-                        <span class="project-tag">{{ project.title }}</span>
-                        {% if project.link %}
-                    </a>
-                    {% else %}
+                        <div class="project-overlay">
+                            {% if project.description %}
+                            <p class="project-desc">{{ project.description }}</p>
+                            {% endif %}
+                            {% if project.link %}
+                            <a class="project-btn" href="{{ project.link }}">Check it out!</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="project-tag">{{ project.title }}</span>
                 </div>
-                {% endif %}
+                {% empty %}
+                <p>Still cooking...</p>
                 {% endfor %}
                 <span class="projects-more">...and more to come...</span>
             </div>
@@ -62,12 +69,23 @@
                     <!-- section social works yang pake mvt, garis talinya, fotonya nempel di sini -->
                      <span class="socials-line" aria-hidden="true"></span>
                      {% for sw in social_works %}
-                     <div class="polaroid">
+                     <div class="polaroid" tabindex="0">
                         <span class="polaroid-tag">{{ sw.title }}</span>
-                        {% if sw.photo %}
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="{{ sw.photo }}" alt="{{ sw.title }}">
-                        {% endif %}
+                        <div class="polaroid-inner">
+                            <div class="polaroid-front">
+                                {% if sw.photo %}
+                                <img class="polaroid-photo" loading="lazy" decoding="async" src="{{ sw.photo }}" alt="{{ sw.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="polaroid-back">
+                                {% if sw.description %}
+                                <p class="polaroid-desc">{{ sw.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
+                    {% empty %}
+                    <p>Works are yet to be done...</p>
                     {% endfor %}
                     <span class="socials-more">...and more to come ♡</span>
                 </div>

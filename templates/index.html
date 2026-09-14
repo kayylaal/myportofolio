@@ -11,7 +11,10 @@
     <!-- navbar, isinya logo hati sama nama sama tombol menu -->
     <header class="site-header">
         <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+            <a href="{% url 'main:show_main' %}" class="brand">
+                <img class="brand-heart" src="/static/img/heart.png" alt="">
+                {{ name }}
+            </a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experiences' %}">Experiences</a>
@@ -26,7 +29,7 @@
             <div class="hero-layout">
                 <div class="hero-col hero-col-left">
                     <!-- ini h1nya cuma satu aja buat nama lengkap "Kayla Ali" biar struktur headingnya bener, yang "Ali" di kanan itu cuma span hiasan aja, disembunyiin dari screen reader biar ga kebaca dua kali -->
-                    <h1>{{ name }}</h1>
+                    <h1 class="hero-name hero-name-left">{{ name }}</h1>
                     <p class="bio">{{ bio }}</p>
                     <p class="tagline">I design, code, and have fun!</p>
                 </div>
@@ -56,46 +59,26 @@
             </div>
             <!-- tiap card dibungkus <a> biar foto sama namanya sama-sama bisa diklik. labelnya ganjil di bawah genap di atas, ngikutin css-nya. belum ditambahin linknya maaf karena link2 figmanya masih error plis -->
             <div class="projects-track" id="projectsTrack">
-                <a class="project-card" href="https://susunjadwal.cs.ui.ac.id">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/susunjadwal.png" alt="SusunJadwal">
-                    <span class="project-tag">SusunJadwal</span>
-                </a>
-                <a class="project-card" href="https://compfest.id">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/compfest18.png" alt="Compfest 18">
-                    <span class="project-tag">Compfest 18</span>
-                </a>
-                <a class="project-card" href="https://oh.cs.ui.ac.id/ambassador">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/oh26.png" alt="Open House Fasilkom 2026">
-                    <span class="project-tag">Open House<br>Fasilkom 2026</span>
-                </a>
-                <a class="project-card" href="#">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/oh25.png" alt="Open House Fasilkom 2025">
-                    <span class="project-tag">Open House<br>Fasilkom 2025</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/rDI6eziRJmHaFaxmzo5PHU/NomNom?node-id=91-1062&t=bpD2VBrrlL3WFtL6-1">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/nomnom.png" alt="NomNom">
-                    <span class="project-tag">NomNom</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/8Xc1YRPZJbN7BiPTy7NsFH/Apollo?node-id=12-5096&t=3AQTkS6RWgLHKTPG-1">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/apollo.png" alt="Apollo">
-                    <span class="project-tag">Apollo</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/1IMWzj3RPtpAVBpcxzK612/tinted-?node-id=1-25&t=WzUW0i07qm7GzCvF-1">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/tinted.png" alt="tinted!">
-                    <span class="project-tag">tinted!</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/DDu9giWz5NfJsxldBanZVg/Untitled?m=auto&t=uej62nISDSLDhjsY-1">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/glee.png" alt="glee">
-                    <span class="project-tag">glee</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/VPeMmScclYe6tut7DyMnP6/Fiery?node-id=0-1&t=Lchvlg1GAThw507o-1">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/fiery.png" alt="Fiery">
-                    <span class="project-tag">Fiery</span>
-                </a>
-                <a class="project-card" href="https://www.figma.com/design/8wE5xWrUMdgHdFF1BuTegQ/Marquee?m=auto&t=uej62nISDSLDhjsY-6">
-                    <img class="project-thumb" loading="lazy" decoding="async" src="/static/img/marquee.png" alt="marquee">
-                    <span class="project-tag">marquee</span>
-                </a>
+                {% for project in projects %}
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        {% if project.thumbnail %}
+                        <img class="project-thumb" loading="lazy" decoding="async" src="{{ project.thumbnail }}" alt="{{ project.title }}">
+                        {% endif %}
+                        <div class="project-overlay">
+                            {% if project.description %}
+                            <p class="project-desc">{{ project.description }}</p>
+                            {% endif %}
+                            {% if project.link %}
+                            <a class="project-btn" href="{{ project.link }}">Check it out!</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="project-tag">{{ project.title }}</span>
+                </div>
+                {% empty %}
+                <p>Still cooking...</p>
+                {% endfor %}
                 <span class="projects-more">...and more to come...</span>
             </div>
         </div>
@@ -112,27 +95,25 @@
                 <div class="socials-rail">
                     <!-- garis talinya, fotonya nempel di sini -->
                     <span class="socials-line" aria-hidden="true"></span>
-                    <!-- tiap polaroid miringnya selang-seling ngikutin css (ganjil -3.43, genap +3.43) labelnya juga gantian atas-bawah -->
-                    <div class="polaroid">
-                        <span class="polaroid-tag">AIESEC Local Volunteer</span>
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="/static/img/lv.png" alt="AIESEC Local Volunteer">
+                    {% for sw in social_works %}
+                    <div class="polaroid" tabindex="0">
+                        <span class="polaroid-tag">{{ sw.title }}</span>
+                        <div class="polaroid-inner">
+                            <div class="polaroid-front">
+                                {% if sw.photo %}
+                                <img class="polaroid-photo" loading="lazy" decoding="async" src="{{ sw.photo }}" alt="{{ sw.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="polaroid-back">
+                                {% if sw.description %}
+                                <p class="polaroid-desc">{{ sw.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <div class="polaroid">
-                        <span class="polaroid-tag">PMB &amp; PSAF</span>
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="/static/img/psaf.png" alt="PMB and PSAF">
-                    </div>
-                    <div class="polaroid">
-                        <span class="polaroid-tag">DDP 0</span>
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="/static/img/ddp0.png" alt="DDP 0">
-                    </div>
-                    <div class="polaroid">
-                        <span class="polaroid-tag">BETIS</span>
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="/static/img/betis.png" alt="BETIS">
-                    </div>
-                    <div class="polaroid">
-                        <span class="polaroid-tag">Pekan Ristek</span>
-                        <img class="polaroid-photo" loading="lazy" decoding="async" src="/static/img/pekris.png" alt="Pekan Ristek">
-                    </div>
+                    {% empty %}
+                    <p>Works are yet to be done...</p>
+                    {% endfor %}
                     <span class="socials-more">...and more to come ♡</span>
                 </div>
             </div>
