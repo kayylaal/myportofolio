@@ -46,3 +46,18 @@ Prompt log (gambaran besar):
 
 3. Perbedaan makemigrations dan migrate adalah makemigrations itu untuk membuat file migrasi (instruksi perubahan) tetapi tidak mengubah database, outputnya adalah file .py di folder migrations, sedangkan migrate untuk menjalankan file migrasi ke database sesuai instruksi, outputnya adalah tabel database yang sudah diupdate. 
 Contoh yang saya alami adlah saat menambahkan model Project dan Social Works. 
+
+**Dokumentasi & AI Disclosure**
+
+Tools yang dipakai: ChatGPT (untuk brainstorming) dan OpenCode (untuk debug)
+
+Strategi prompting: saya biasanya coba sendiri dulu di vscode sesuai penjelasan di website pbp, langsung lihat hasilnya di browser. Kalau hasilnya tidak sesuai atau error (misalnya overlay meluap dari foto, atau flip card tidak jalan di mobile), baru saya tanya AI dengan menjelaskan masalahnya + screenshot. Kalau masih bingung, saya minta alternatif solusi atau kode referensi.
+
+Bagian spesifik yang dibantu AI: membuat flip card animation untuk social works pakai pure CSS, membuat unit test Django (3 kasus: URL + template, data muncul, empty state)
+
+Keterbatasan AI + perbaikan manual: untuk di mobile, AI tidak memikirkan bahwa hover tidak berfungsi di touch device, jadi saya tambahkan sendiri interaksi agar bisa di-tap. Lesson learned: untuk detail visual dan aksesibilitas manusia, lebih tepat verifikasi sendiri dengan mata manusia.
+
+Prompt log (gambaran besar):
+
+Social works cards kalau di-hover kebalik kayak kartu flip, balik jadi putih polos #FCF9F1 dengan deskripsi warna abu.
+Bikin unit test Django yang cover: URL akses + template tepat, data muncul di HTML, dan empty state muncul kalau data kosong.

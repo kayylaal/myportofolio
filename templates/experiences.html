@@ -38,6 +38,7 @@
                         {% if project.thumbnail %}
                         <img class="project-thumb" loading="lazy" decoding="async" src="{{ project.thumbnail }}" alt="{{ project.title }}">
                         {% endif %}
+                        <!-- overlay muncul saat hover, menampilkan deskripsi dan tombol link project -->
                         <div class="project-overlay">
                             {% if project.description %}
                             <p class="project-desc">{{ project.description }}</p>
@@ -49,6 +50,7 @@
                     </div>
                     <span class="project-tag">{{ project.title }}</span>
                 </div>
+                    <!-- ditampilkan ketika database belum ada data projects -->
                 {% empty %}
                 <p>Still cooking...</p>
                 {% endfor %}
@@ -72,6 +74,7 @@
                      <div class="polaroid" tabindex="0">
                         <span class="polaroid-tag">{{ sw.title }}</span>
                         <div class="polaroid-inner">
+                            <!-- flip card polaroid-front menampilkan foto, polaroid-back menampilkan deskripsi -->
                             <div class="polaroid-front">
                                 {% if sw.photo %}
                                 <img class="polaroid-photo" loading="lazy" decoding="async" src="{{ sw.photo }}" alt="{{ sw.title }}">
@@ -84,6 +87,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- ditampilkan ketika database belum ada data social work -->
                     {% empty %}
                     <p>Works are yet to be done...</p>
                     {% endfor %}

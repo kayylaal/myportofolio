@@ -435,6 +435,7 @@ h1, .brand {
     transform: rotate(3.43deg);
 }
 
+/* transform-style preserve-3d + backface-visibility hidden untuk efek 3D */
 .polaroid-inner {
     position: relative;
     width: 100%;
@@ -789,7 +790,7 @@ h1, .brand {
         margin-left: auto;
         margin-right: auto;
     }
-/* mobile: overlay project default visible, polaroid flip on tap */
+/* di mobile overlay project & polaroid flip on tap */
     .project-card-inner .project-overlay {
         opacity: 1;
     }
