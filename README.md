@@ -37,3 +37,12 @@ Prompt log (gambaran besar):
 2. Aku mau posisi heronya Kayla di kiri, foto di tengah, dan Ali di kanan. saya sudah punya HTML-nya. Gimana cara mengatur layout-nya dengan CSS Grid supaya posisinya sesuai?
 3. Layout desktopku sudah seperti ini, tapi ketika dibuka di mobile posisinya berantakan. Kira-kira bagian CSS mana yang perlu diubah supaya tetap responsive?
 4. Aku sudah coba beberapa cara tapi hasilnya belum sesuai. Bisa kasih beberapa alternatif cara untuk mengatur posisi elemen ini tanpa mengubah struktur HTML terlalu banyak?
+
+### Tugas 2
+
+1. Pertama, user membuka web portofolio, lalu portofolio/urls.py (urls proyek) menerima request lalu mencocokkan pattern "" men-forward ke app main. main/urls.py lalu mencocokkan experiences/ dan memanggil view show_experiences untuk menampilkan experiences. View lalu menjalankan Project.objects.all() dan SocialWork.objects.all() untuk ambil data dari database lewat model. Data lalu dimasukkan ke context dictionary (dikirim ke template experiences.html), lalu template merender HTML dengan django template language (for loop). HTML response lalu dikirim balik ke browser untuk dilihat user.
+
+2. Data disimpan di model bukan hardcoded di template agar lebih maintainable (mudah diganti2), scalable (bisa menghapus/menambah data tanpa mengedit kode), resuable (data bisa dipakai di beberapa halaman), concern terpisah (kode logic terpisah dari template), dan memudahkan collaboration melalui admin page. Kalau hardcoded, setiap perubahan harus mengubah kode langsung sehingga rawan error dan sulit untuk dimaintain.
+
+3. Perbedaan makemigrations dan migrate adalah makemigrations itu untuk membuat file migrasi (instruksi perubahan) tetapi tidak mengubah database, outputnya adalah file .py di folder migrations, sedangkan migrate untuk menjalankan file migrasi ke database sesuai instruksi, outputnya adalah tabel database yang sudah diupdate. 
+Contoh yang saya alami adlah saat menambahkan model Project dan Social Works. 
