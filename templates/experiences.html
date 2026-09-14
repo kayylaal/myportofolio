@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Kayla Ali, Information Systems student at Universitas Indonesia.">
+    <title>{{ name }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- navbar, isinya logo hati sama nama sama tombol menu -->
+    <header class="site-header">
+        <div class="container">
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+            <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experiences' %}">Experiences</a>
+            </nav>
+        </div>
+    </header>
+
+<main>
+    <!-- section projects, cardsnya discroll ke samping -->
+    <section class="projects" id="projects">
+        <div class="projects-inner">
+            <div class="section-head">
+                <h2 class="section-title">Projects</h2>
+                <img class="section-deco" loading="lazy" decoding="async" src="/static/img/art.png" alt="">
+            </div>
+            <!-- section projects yang pake mvt -->
+            <div class="projects-track" id="projectsTrack">
+                {% for project in projects %}
+                {% if project.link %}
+                <a class="project-card" href="{{ project.link }}">
+                    {% else %}
+                    <div class="project-card">
+                        {% endif %}
+                        {% if project.thumbnail %}
+                        <img class="project-thumb" loading="lazy" decoding="async" src="{{ project.thumbnail }}" alt="{{ project.title }}">
+                        {% endif %}
+                        <span class="project-tag">{{ project.title }}</span>
+                        {% if project.link %}
+                    </a>
+                    {% else %}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <span class="projects-more">...and more to come...</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- bagian social works, fotonya digantung di tali jemuran gitu -->
+    <section class="socials" id="socials">
+        <div class="socials-inner">
+            <div class="section-head">
+                <img class="section-deco" loading="lazy" decoding="async" src="/static/img/music.png" alt="">
+                <h2 class="section-title section-title-right">Social Works</h2>
+            </div>
+            <div class="socials-track" id="socialsTrack">
+                <div class="socials-rail">
+                    <!-- section social works yang pake mvt, garis talinya, fotonya nempel di sini -->
+                     <span class="socials-line" aria-hidden="true"></span>
+                     {% for sw in social_works %}
+                     <div class="polaroid">
+                        <span class="polaroid-tag">{{ sw.title }}</span>
+                        {% if sw.photo %}
+                        <img class="polaroid-photo" loading="lazy" decoding="async" src="{{ sw.photo }}" alt="{{ sw.title }}">
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <span class="socials-more">...and more to come ♡</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+    <!-- footer, ada ikcon2 sosmed sama gambar kelinci :> -->
+    <footer class="collab-footer">
+        <div class="collab-inner">
+            <div class="collab-left">
+                <h2 class="collab-title">Let's Collab!</h2>
+                <div class="collab-icons">
+                    <a href="https://github.com/kayylaal" aria-label="GitHub">
+                        <img src="/static/img/github.png" alt="GitHub" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://line.me/ti/p/U0RPewow1G" aria-label="LINE">
+                        <img src="/static/img/line.png" alt="LINE" loading="lazy" decoding="async">
+                    </a>
+                    <a href="mailto:kaylakiranali11@gmail.com" aria-label="Email">
+                        <img src="/static/img/mail.png" alt="Email" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://www.instagram.com/kayylaal/" aria-label="Instagram">
+                        <img src="/static/img/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+                    </a>
+                    <a href="https://www.linkedin.com/in/kayla-kirana-ali-trimardhany/" aria-label="LinkedIn">
+                        <img src="/static/img/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+                    </a>
+                </div>
+                <p>&copy; @2026 {{ name }} -- please hit me up!! ♥︎</p>
+            </div>
+            <div class="collab-right">
+                <img class="collab-heart" src="/static/img/bunnies.png" alt="Pixel bunnies" loading="lazy" decoding="async">
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

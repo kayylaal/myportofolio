@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from main.models import Project, SocialWork
 
 def show_main(request):
     context = {
@@ -11,3 +11,11 @@ def show_main(request):
         ),
     }
     return render(request, "index.html", context)
+
+def show_experiences(request):
+    context = {
+        "name": "Kayla",
+        "projects": Project.objects.all(),
+        "social_works": SocialWork.objects.all(),
+    }
+    return render(request, "experiences.html", context)
