@@ -1,6 +1,6 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput
+from django.forms import ModelForm, TextInput, Textarea, URLInput, NumberInput
 
-from main.models import Project
+from main.models import Project, SocialWork
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -40,6 +40,48 @@ class ProjectForm(ModelForm):
             "thumbnail": URLInput(
                 attrs={
                     "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+        }
+
+class SocialWorkForm(ModelForm):
+    class Meta:
+        model = SocialWork
+        fields = [
+            "title",
+            "description",
+            "photo",
+            "year",
+        ]
+
+        labels = {
+            "title": "Nama Social Work",
+            "description": "Deskripsi Social Work",
+            "photo": "URL Gambar Social Work",
+            "year": "Tahun Social Work",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Summer Volunteer",
+                    "maxlength": 255,
+                }
+            ),
+            "description": Textarea(
+                attrs={
+                    "placeholder": "Ceritakan Social Work-mu",
+                    "rows": 3,
+                }
+            ),
+            "photo": URLInput(
+                attrs={
+                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+            "year": NumberInput(
+                attrs={
+                    "placeholder": "2007",
                 }
             ),
         }
