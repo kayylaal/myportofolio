@@ -1,12 +1,25 @@
-Nama : Kayla Kirana Ali Trimardhany
-
-NPM : 2506603854
-
-Kelas : PBP A
-
-Hobi : Tidur
-
+Nama : Kayla Kirana Ali Trimardhany \
+NPM : 2506603854 \
+Kelas : PBP A \
+Hobi : Tidur \
 Jurusan : Sistem Informasi
+
+## MyPortofolio
+
+Website portfolio saya yang dibuat dengan Django. Halaman utama berisi hero/profile, daftar Projects, dan Social Works. Datanya tidak di-hardcode di template, tapi disimpan di database sehingga bisa ditambah, diubah, dan dihapus lewat form. Data yang sama juga  disediakan dalam bentuk JSON beserta filter pencarian `?title=`.
+
+Fitur yang sudah jalan:
+* Projects: halaman list (`/projects/`, datanya diambil dari JSON lalu di-deserialize), tambah (`/projects/add/`), ubah (`/projects/<id>/edit/`), hapus (modal konfirmasi, POST), dan JSON (`/api/projects/`)
+* Social Works: sama seperti di `/socialworks/`, tambah/ubah/hapus, JSON di `/api/socialworks/`, plus field `year` (Char/Text/URL/Integer)
+* Halaman lain: `/` (profile), `/experiences/` (tampilan), `/admin/`. Semua halaman memakai `extends base.html` agar strukturnya konsisten.
+
+Teknologi: Django 6.1, Python 3.13 (pakai `./env/bin/python`), SQLite untuk lokal dan PostgreSQL untuk produksi, WhiteNoise, python-dotenv.
+
+Cara menjalankan:
+1. Migrasi database: `./env/bin/python manage.py migrate`
+2. Jalankan server: `./env/bin/python manage.py runserver`, lalu buka `http://127.0.0.1:8000/`
+3. Cek kesehatan kode: `./env/bin/python manage.py check` dan `./env/bin/python manage.py test main`
+4. Cek JSON via browser/Postman (harus 200 OK): `/api/projects/`, `/api/projects/?title=susun`, `/api/socialworks/`, `/api/socialworks/?title=aiesec`
 
 ### Tugas 1
 
@@ -61,3 +74,29 @@ Prompt log (gambaran besar):
 
 Social works cards kalau di-hover kebalik kayak kartu flip, balik jadi putih polos #FCF9F1 dengan deskripsi warna abu.
 Bikin unit test Django yang cover: URL akses + template tepat, data muncul di HTML, dan empty state muncul kalau data kosong.
+
+### Tugas 3
+
+1. Saya pakai `ModelForm` karena form-nya langsung nyambung ke model, jadi field, `max_length`, URL, dan validasinya ngikutin model tanpa ditulis ulang di HTML. Kalau bikin form manual, aturan di template dan di model bisa beda, terus validasi sama `save()` harus ditulis sendiri jadi rawan salah. Contoh yang saya alami adalah saat bikin `SocialWorkForm`, saya tinggal isi `fields = [title, description, photo, year]` lalu `form.is_valid()` dan `form.save()`. `{% csrf_token %}` wajib karena tiap POST dicek `CsrfViewMiddleware`, kalau tidak ada token request ditolak 403. Fungsinya biar form tidak bisa dikirim dari situs lain atas nama user yang lagi login (serangan CSRF).
+
+2. JSON lebih disukai daripada XML karena penulisannya lebih ringkas (tidak banyak tag buka-tutup), jadi payload lebih kecil dan cepat dibaca. JSON juga langsung nyambung ke JavaScript (`JSON.parse`), gampang dipakai frontend dan mobile, tetap kebaca manusia, dan tool seperti Postman dan REST API sekarang umumnya pakai JSON.
+
+3. Alurnya saat saya kembalikan data dalam bentuk JSON adalah request masuk ke view `get_socialworks_json`, lalu view ambil `SocialWork.objects.all()` dan filter `title__icontains` kalau ada `?title=`. Setelah itu `serializers.serialize("json", queryset)` mengubah queryset jadi string JSON, lalu dikirim lewat `HttpResponse(..., content_type="application/json")`. Untuk halaman webnya (`show_socialworks`), saya panggil fungsi JSON itu lalu `serializers.deserialize` supaya JSON berubah lagi jadi object model sebelum dikirim ke template. Serialisasi itu perlu karena object model Django tidak bisa langsung jadi JSON, masih berupa tipe Python dan relasi, jadi harus diubah dulu ke format standar yang bisa di-parse browser.
+
+**Dokumentasi & AI Disclosure**
+
+Tools yang dipakai: ChatGPT (untuk brainstorming) dan OpenCode (untuk debug)
+
+Strategi prompting: saya coba tulis sendiri dulu di vscode mengikuti pola Projects yang sudah jalan di tutorial 3, langsung cek dengan `check`. Kalau error (misalnya `NoReverseMatch` atau `TemplateDoesNotExist`), baru saya tanya AI dengan copy error + screenshot. Kalau masih ragu soal kerapian, saya tanya apakah lebih baik disamakan saja atau dibuat terpisah.
+
+Bagian spesifik yang dibantu AI: debug saat URL atau variabel template tidak cocok (misal `create_socialwork` vs `create_socialworks`, `thumbnail` vs `photo`).
+
+Keterbatasan AI + perbaikan manual: AI sempat menyarankan class CSS baru (`socialwork-header`, dll), padahal CSS saya cuma punya class `project-*`. Jadi saya samakan saja class-nya dengan Project biar tidak redundan. 
+
+Lesson learned: untuk beberapa masalah seperti efisiensi, kadang manusia lebih memiliki ide.
+
+Prompt log (gambaran besar):
+
+1. Apa class-nya samain aja sama Project biar nggak redundan dan tetap kepakai styling-nya?
+2. Coba debug, `NoReverseMatch` untuk create/update SocialWork padahal URL sudah ada, kira-kira nama yang salah di mana?
+3. Coba debug, halaman `/socialworks/` error `TemplateDoesNotExist`, file mana yang belum kebaca?

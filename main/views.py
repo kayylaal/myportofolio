@@ -80,6 +80,7 @@ def create_socialworks(request):
 
 def update_socialworks(request, socialwork_id):
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
+    # instance agar form mengedit data yang sudah ada
     form = SocialWorkForm(request.POST or None, instance=socialwork)
 
     if request.method == "POST" and form.is_valid():
@@ -113,6 +114,7 @@ def show_projects(request):
 
 def show_socialworks(request):
     title_query = request.GET.get("title", "").strip()
+    # ambil JSON internal lalu kembalikan jadi object untuk template
     json_response = get_socialworks_json(request)
     socialwork_list = []
     for obj in serializers.deserialize("json", json_response.content):
@@ -140,6 +142,7 @@ def get_socialworks_json(request):
     title_query = request.GET.get("title", "").strip()
     socialworks = SocialWork.objects.all()
 
+    # filter judul kalau ada query ?title=
     if title_query:
         socialworks = socialworks.filter(title__icontains=title_query)
 

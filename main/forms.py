@@ -44,6 +44,7 @@ class ProjectForm(ModelForm):
             ),
         }
 
+# form kegiatan sosial, year pakai NumberInput
 class SocialWorkForm(ModelForm):
     class Meta:
         model = SocialWork
