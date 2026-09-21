@@ -1,56 +1,56 @@
 {% extends "base.html" %}
 {% block meta %}
-    <title>Projects - {{ name }}</title>
+    <title>Social Works - {{ name }}</title>
 {% endblock meta %}
 {% block content %}
     <main>
         <section class="experience-section" id="experience">
             <div class="container">
-                <p class="section-kicker">Projects I've Done</p>
+                <p class="section-kicker">Social Works I've Been A Part Of</p>
                 <div class="project-header">
-                    <h1>Projects</h1>
-                    <a href="{% url 'main:create_project' %}"
+                    <h1>Social Works</h1>
+                    <a href="{% url 'main:create_socialworks' %}"
                        class="button project-add-button">
                         <span aria-hidden="true">+</span>
-                        Add Project
+                        Add Social Work
                     </a>
                 </div>
                 <form method="get"
-                      action="{% url 'main:show_projects' %}"
+                      action="{% url 'main:show_socialworks' %}"
                       class="project-search">
                     <input type="search"
                            name="title"
                            value="{{ title_query }}"
-                           placeholder="Search a project..."
+                           placeholder="Search a social work..."
                            class="project-search__input"
-                           aria-label="Search a project...">
+                           aria-label="Search a social work...">
                     <button type="submit" class="button">Search</button>
                 </form>
                 <div class="experience-grid project-grid">
-                    {% for project in project_list %}
+                    {% for socialwork in socialwork_list %}
                         <article class="experience-card">
-                            {% if project.thumbnail %}
-                                <img src="{{ project.thumbnail }}"
-                                     alt="Gambar {{ project.title }}"
+                            {% if socialwork.photo %}
+                                <img src="{{ socialwork.photo }}"
+                                     alt="Gambar {{ socialwork.title }}"
                                      class="project-image">
                             {% endif %}
-                            <h2>{{ project.title }}</h2>
-                            <p class="experience-description">{{ project.description }}</p>
+                            <h2>{{ socialwork.title }}</h2>
+                            {% if socialwork.year %}
+                                <p class="experience-status">{{ socialwork.year }}</p>
+                            {% endif %}
+                            <p class="experience-description">{{ socialwork.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
-                                    {% if project.link %}
-                                        <a href="{{ project.link }}" class="button">See Project</a>
-                                    {% endif %}
-                                    <a href="{% url 'main:update_project' project.id %}" class="button button-secondary">Change</a>
-                                    {% include "components/project_delete_modal.html" with project=project %}
+                                    <a href="{% url 'main:update_socialworks' socialwork.id %}" class="button button-secondary">Edit</a>
+                                    {% include "components/socialwork_delete_modal.html" with sw=socialwork %}
                                 </div>
                             </div>
                         </article>
                     {% empty %}
                         {% if title_query %}
-                            <p class="empty-state">No project with that name...</p>
+                            <p class="empty-state">No social work with that name...</p>
                         {% else %}
-                            <p class="empty-state">No project yet.</p>
+                            <p class="empty-state">No social work yet.</p>
                         {% endif %}
                     {% endfor %}
                 </div>

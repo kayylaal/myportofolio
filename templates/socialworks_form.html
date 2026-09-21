@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block meta %}
-    <title>{% if is_update %}Edit Project{% else %}Add Project{% endif %} - {{ name }}</title>
+    <title>{% if is_update %}Edit Social Work{% else %}Add Social Work{% endif %} - {{ name }}</title>
 {% endblock meta %}
 {% block content %}
     <main>
         <section class="experience-section">
             <div class="container">
-                <h1>{% if is_update %}Edit Project{% else %}Add New Projects{% endif %}</h1>
+                <h1>{% if is_update %}Edit Social Work{% else %}Add New Social Works{% endif %}</h1>
                 <form method="post"
-                      action="{% if is_update %}{% url 'main:update_project' project.id %}{% else %}{% url 'main:create_project' %}{% endif %}"
+                      action="{% if is_update %}{% url 'main:update_socialworks' socialwork.id %}{% else %}{% url 'main:create_socialworks' %}{% endif %}"
                       class="project-form">
                     {% csrf_token %}
                     {% for field in form %}
@@ -20,8 +20,8 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                    <button type="submit" class="button">{% if is_update %}Save Changes{% else %}Add Project{% endif %}</button>
-                    <a href="{% url 'main:show_projects' %}" class="button button-secondary">Cancel</a>
+                    <button type="submit" class="button">{% if is_update %}Save Changes{% else %}Add Social Work{% endif %}</button>
+                    <a href="{% url 'main:show_socialworks' %}" class="button button-secondary">Cancel</a>
                 </form>
             </div>
         </section>

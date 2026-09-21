@@ -1,12 +1,25 @@
-Nama : Kayla Kirana Ali Trimardhany
-
-NPM : 2506603854
-
-Kelas : PBP A
-
-Hobi : Tidur
-
+Nama : Kayla Kirana Ali Trimardhany \
+NPM : 2506603854 \
+Kelas : PBP A \
+Hobi : Tidur \
 Jurusan : Sistem Informasi
+
+## MyPortofolio
+
+Website portfolio saya yang dibuat dengan Django. Halaman utama berisi hero/profile, daftar Projects, dan Social Works. Datanya tidak di-hardcode di template, tapi disimpan di database sehingga bisa ditambah, diubah, dan dihapus lewat form. Data yang sama juga  disediakan dalam bentuk JSON beserta filter pencarian `?title=`.
+
+Fitur yang sudah jalan:
+* Projects: halaman list (`/projects/`, datanya diambil dari JSON lalu di-deserialize), tambah (`/projects/add/`), ubah (`/projects/<id>/edit/`), hapus (modal konfirmasi, POST), dan JSON (`/api/projects/`)
+* Social Works: sama seperti di `/socialworks/`, tambah/ubah/hapus, JSON di `/api/socialworks/`, plus field `year` (Char/Text/URL/Integer)
+* Halaman lain: `/` (profile), `/experiences/` (tampilan), `/admin/`. Semua halaman memakai `extends base.html` agar strukturnya konsisten.
+
+Teknologi: Django 6.1, Python 3.13 (pakai `./env/bin/python`), SQLite untuk lokal dan PostgreSQL untuk produksi, WhiteNoise, python-dotenv.
+
+Cara menjalankan:
+1. Migrasi database: `./env/bin/python manage.py migrate`
+2. Jalankan server: `./env/bin/python manage.py runserver`, lalu buka `http://127.0.0.1:8000/`
+3. Cek kesehatan kode: `./env/bin/python manage.py check` dan `./env/bin/python manage.py test main`
+4. Cek JSON via browser/Postman (harus 200 OK): `/api/projects/`, `/api/projects/?title=susun`, `/api/socialworks/`, `/api/socialworks/?title=aiesec`
 
 ### Tugas 1
 
@@ -61,3 +74,4 @@ Prompt log (gambaran besar):
 
 Social works cards kalau di-hover kebalik kayak kartu flip, balik jadi putih polos #FCF9F1 dengan deskripsi warna abu.
 Bikin unit test Django yang cover: URL akses + template tepat, data muncul di HTML, dan empty state muncul kalau data kosong.
+
