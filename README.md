@@ -100,3 +100,4 @@ Prompt log (gambaran besar):
 1. Apa class-nya samain aja sama Project biar nggak redundan dan tetap kepakai styling-nya?
 2. Coba debug, `NoReverseMatch` untuk create/update SocialWork padahal URL sudah ada, kira-kira nama yang salah di mana?
 3. Coba debug, halaman `/socialworks/` error `TemplateDoesNotExist`, file mana yang belum kebaca?
+4. Tolong cek apakah ada kode yang salah/redundan?
