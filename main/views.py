@@ -196,7 +196,7 @@ def get_projects_json(request):
 
     if title_query:
         projects = projects.filter(title__icontains=title_query)
-
+        
     projects_json = serializers.serialize("json", projects, use_natural_foreign_keys=True)
     return HttpResponse(projects_json, content_type="application/json")
 
@@ -209,7 +209,7 @@ def get_socialworks_json(request):
     if title_query:
         socialworks = socialworks.filter(title__icontains=title_query)
 
-    socialworks_json = serializers.serialize("json", socialworks)
+    socialworks_json = serializers.serialize("json", socialworks, use_natural_foreign_keys=True)
     return HttpResponse(socialworks_json, content_type="application/json")
 
 @login_required(login_url="/login/")
