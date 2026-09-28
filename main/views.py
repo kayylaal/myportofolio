@@ -40,7 +40,9 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect("main:show_main")
+    response = redirect("main:show_main")
+    response.delete_cookie('last_login')
+    return response
 
 def show_main(request):
     last_login = request.COOKIES.get('last_login', 'No login session yet/Cookie not found')
