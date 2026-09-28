@@ -253,3 +253,15 @@ def toggle_star(request, project_id):
             project.starred_by.add(request.user)
 
     return redirect("main:show_projects")
+
+@login_required(login_url="/login/")
+def toggle_socialwork_star(request, socialwork_id):
+    socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
+
+    if request.method == "POST":
+        if request.user in socialwork.starred_by.all():
+            socialwork.starred_by.remove(request.user)
+        else:
+            socialwork.starred_by.add(request.user)
+
+    return redirect("main:show_socialworks")

@@ -16,6 +16,7 @@ from main.views import (
     login_user,
     logout_user,
     toggle_star,
+    toggle_socialwork_star,
 )
 
 app_name = "main"
@@ -38,4 +39,5 @@ urlpatterns = [
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),
     path("projects/<int:project_id>/star/", toggle_star, name="toggle_star"),
+    path("socialworks/<int:socialwork_id>/star/", toggle_socialwork_star, name="toggle_socialwork_star"),
 ]
