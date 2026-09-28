@@ -12,6 +12,9 @@ from main.views import (
     create_socialworks,
     update_socialworks,
     delete_socialworks,
+    register,
+    login_user,
+    logout_user,
 )
 
 app_name = "main"
@@ -30,4 +33,7 @@ urlpatterns = [
     path("socialworks/add/", create_socialworks, name="create_socialworks"),
     path("socialworks/<int:socialwork_id>/edit/", update_socialworks, name="update_socialworks"),
     path("socialworks/<int:socialwork_id>/delete/", delete_socialworks, name="delete_socialworks"),
+    path("register/", register, name="register"),
+    path("login/", login_user, name="login"),
+    path("logout/", logout_user, name="logout"),
 ]
