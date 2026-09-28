@@ -92,6 +92,12 @@ h1, .brand {
     background: var(--paper);
 }
 
+.site-header .nav-user {
+    color: var(--bubble_pink);
+    font-weight: 700;
+    align-self: center;
+}
+
 .hero {
     padding: 0;
     min-height: calc(100vh - 80px);
