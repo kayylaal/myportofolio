@@ -44,7 +44,7 @@
                                         <a href="{{ project.link }}" class="button">See Project</a>
                                     {% endif %}
                                     {% include "components/project_star.html" with project=project %}
-                                    {% if user.is_superuser %}
+                                    {% if user.is_superuser or is_editor %}
                                     <a href="{% url 'main:update_project' project.id %}" class="button button-secondary">Change</a>
                                     {% include "components/project_delete_modal.html" with project=project %}
                                     {% endif %}

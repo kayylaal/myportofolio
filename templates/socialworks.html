@@ -43,8 +43,11 @@
                             <p class="experience-description">{{ socialwork.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
-                                    {% if user.is_superuser %}
+                                    {% include "components/socialwork_star.html" with socialwork=socialwork %}
+                                    {% if user.is_superuser or is_editor %}
                                     <a href="{% url 'main:update_socialworks' socialwork.id %}" class="button button-secondary">Edit</a>
+                                    {% endif %}
+                                    {% if user.is_superuser %}
                                     {% include "components/socialwork_delete_modal.html" with sw=socialwork %}
                                     {% endif %}
                                 </div>
