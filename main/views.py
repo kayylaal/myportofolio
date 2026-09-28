@@ -6,6 +6,7 @@ from main.forms import ProjectForm, SocialWorkForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+import datetime
 
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -25,11 +26,14 @@ def login_user(request):
     form = AuthenticationForm(request, data=request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        login(request, form.get_user())
-        return redirect("main:show_main")
+        user = form.get_user()
+        login(request, user)
+        response = redirect("main:show_main")
+        response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return response
 
     context = {
-        "name": "Kayla Ali",
+        "name": "Burhan",
         "form": form,
     }
     return render(request, "login.html", context)
@@ -39,6 +43,7 @@ def logout_user(request):
     return redirect("main:show_main")
 
 def show_main(request):
+    last_login = request.COOKIES.get('last_login', 'No login session yet/Cookie not found')
     context = {
         "name": "Kayla",
         "npm": "2506603854",
@@ -48,9 +53,9 @@ def show_main(request):
         ),
         "projects": Project.objects.all(),
         "social_works": SocialWork.objects.all(),
+        "last_login": last_login,
     }
     return render(request, "index.html", context)
-
 
 def show_experiences(request):
     context = {
