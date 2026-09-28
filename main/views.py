@@ -8,7 +8,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 import datetime
 from django.contrib.auth.decorators import login_required 
-from django.core.exceptions import PermissionDenied        
+from django.core.exceptions import PermissionDenied       
+
+def is_editor(user):
+    return user.is_authenticated and (
+        user.is_superuser or user.groups.filter(name="Editor").exists()
+    )
 
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -92,7 +97,7 @@ def create_project(request):
 
 @login_required(login_url="/login/")
 def update_project(request, project_id):
-    if not request.user.is_superuser:
+    if not is_editor(request.user):
         raise PermissionDenied
     
     project = get_object_or_404(Project, pk=project_id)
@@ -132,7 +137,7 @@ def create_socialworks(request):
 
 @login_required(login_url="/login/")
 def update_socialworks(request, socialwork_id):
-    if not request.user.is_superuser:
+    if not is_editor(request.user):
         raise PermissionDenied
     
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
@@ -164,6 +169,7 @@ def show_projects(request):
         "name": "Kayla",
         "project_list": project_list,
         "title_query": title_query,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "projects.html", context)
 
@@ -180,6 +186,7 @@ def show_socialworks(request):
         "name": "Kayla",
         "socialwork_list": socialwork_list,
         "title_query": title_query,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "socialworks.html", context)
 
