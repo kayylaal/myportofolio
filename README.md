@@ -100,3 +100,27 @@ Prompt log (gambaran besar):
 1. Apa class-nya samain aja sama Project biar nggak redundan dan tetap kepakai styling-nya?
 2. Coba debug, `NoReverseMatch` untuk create/update SocialWork padahal URL sudah ada, kira-kira nama yang salah di mana?
 3. Coba debug, halaman `/socialworks/` error `TemplateDoesNotExist`, file mana yang belum kebaca?
+
+### Tugas 4
+
+Fitur baru: registrasi/login/logout (UserCreationForm, AuthenticationForm),
+cookie last_login (set saat login, hapus saat logout), otorisasi 4 peran
+(guest/user/editor/superuser, editor via grup "Editor" di /admin, 403 kalau
+tidak berhak), star di Project + SocialWork (ManyToManyField ke User,
+toggle POST + csrf_token), API pakai natural keys biar tidak bocor id user.
+
+Setup tambahan minggu ini:
+1. `./env/bin/python manage.py createsuperuser` (buat akun owner)
+2. Login `/admin` → Groups → bikin grup `Editor` → masukkan akun editor
+
+**Dokumentasi & AI Disclosure**
+
+Tools yang dipakai: ChatGPT (untuk bertanya-tanya)
+
+Strategi prompting: saya mencoba menulis kode sendiri memakai pengetahuan dan kode-kode yang sudah ada di tutorial 4, tapi untuk beberapa hal saya masih bingung jadinya untuk hal-hal yang ragu saya tanya ke ChatGPT
+
+Bagian spesifik yang dibantu AI: memahami maksud soal, memahami cara kerja menambahkan editor, memahami cara mengamankan endpoint json
+
+Keterbatasan AI + perbaikan manual: ChatGPT terbatas dalam mencari bug yang saya alami, karena tidak terhubung langsung dengan project saya, jadi saat ada error (saya lupa kasih if else di tombol delete project) saya perbaiki sendiri. Untuk tambahan saya juga mengganti2 warna dari template di tutorial.
+
+Chat/log AI: https://chatgpt.com/share/6aba693f-fb94-83ec-be80-730d3993f491

@@ -9,6 +9,7 @@
                 <p class="section-kicker">Social Works I've Been A Part Of</p>
                 <div class="project-header">
                     <h1>Social Works</h1>
+                    <!-- kalo superuser bisa add -->
                     {% if user.is_superuser %}
                     <a href="{% url 'main:create_socialworks' %}"
                        class="button project-add-button">
@@ -44,9 +45,11 @@
                             <div class="project-card-actions">
                                 <div class="project-actions">
                                     {% include "components/socialwork_star.html" with socialwork=socialwork %}
+                                    <!-- kalo superuser atau editor bisa update -->
                                     {% if user.is_superuser or is_editor %}
                                     <a href="{% url 'main:update_socialworks' socialwork.id %}" class="button button-secondary">Edit</a>
                                     {% endif %}
+                                    <!-- kalo superuser bisa delete (tombolnya muncul) -->
                                     {% if user.is_superuser %}
                                     {% include "components/socialwork_delete_modal.html" with sw=socialwork %}
                                     {% endif %}
