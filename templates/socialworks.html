@@ -9,11 +9,13 @@
                 <p class="section-kicker">Social Works I've Been A Part Of</p>
                 <div class="project-header">
                     <h1>Social Works</h1>
+                    {% if user.is_superuser %}
                     <a href="{% url 'main:create_socialworks' %}"
                        class="button project-add-button">
                         <span aria-hidden="true">+</span>
                         Add Social Work
                     </a>
+                    {% endif %}
                 </div>
                 <form method="get"
                       action="{% url 'main:show_socialworks' %}"
@@ -41,8 +43,10 @@
                             <p class="experience-description">{{ socialwork.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
+                                    {% if user.is_superuser %}
                                     <a href="{% url 'main:update_socialworks' socialwork.id %}" class="button button-secondary">Edit</a>
                                     {% include "components/socialwork_delete_modal.html" with sw=socialwork %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>

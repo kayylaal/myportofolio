@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 import datetime
+from django.contrib.auth.decorators import login_required 
+from django.core.exceptions import PermissionDenied        
 
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -28,7 +30,7 @@ def login_user(request):
     if request.method == "POST" and form.is_valid():
         user = form.get_user()
         login(request, user)
-        response = redirect("main:show_main")
+        response = redirect(request.GET.get("next") or "main:show_main")
         response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         return response
 
@@ -37,6 +39,7 @@ def login_user(request):
         "form": form,
     }
     return render(request, "login.html", context)
+
 
 def logout_user(request):
     logout(request)
@@ -67,8 +70,12 @@ def show_experiences(request):
     }
     return render(request, "experiences.html", context)
 
-
+@login_required(login_url="/login/")
 def create_project(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    
     form = ProjectForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -83,8 +90,11 @@ def create_project(request):
     }
     return render(request, "projects_form.html", context)
 
-
+@login_required(login_url="/login/")
 def update_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     project = get_object_or_404(Project, pk=project_id)
     form = ProjectForm(request.POST or None, instance=project)
 
@@ -101,7 +111,11 @@ def update_project(request, project_id):
     }
     return render(request, "projects_form.html", context)
 
+@login_required(login_url="/login/")
 def create_socialworks(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     form = SocialWorkForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -116,8 +130,11 @@ def create_socialworks(request):
     }
     return render(request, "socialworks_form.html", context)
 
-
+@login_required(login_url="/login/")
 def update_socialworks(request, socialwork_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
     # instance agar form mengedit data yang sudah ada
     form = SocialWorkForm(request.POST or None, instance=socialwork)
@@ -173,7 +190,7 @@ def get_projects_json(request):
     if title_query:
         projects = projects.filter(title__icontains=title_query)
 
-    projects_json = serializers.serialize("json", projects)
+    projects_json = serializers.serialize("json", projects, use_natural_foreign_keys=True)
     return HttpResponse(projects_json, content_type="application/json")
 
 
@@ -188,8 +205,11 @@ def get_socialworks_json(request):
     socialworks_json = serializers.serialize("json", socialworks)
     return HttpResponse(socialworks_json, content_type="application/json")
 
-
+@login_required(login_url="/login/")
 def delete_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
@@ -199,7 +219,11 @@ def delete_project(request, project_id):
 
     return redirect("main:show_projects")
 
+@login_required(login_url="/login/")
 def delete_socialworks(request, socialwork_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
 
     if request.method == "POST":
@@ -208,3 +232,17 @@ def delete_socialworks(request, socialwork_id):
         return redirect("main:show_socialworks")
 
     return redirect("main:show_socialworks")
+
+@login_required(login_url="/login/")
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        # Kalau akun ini sudah pernah memberi star, batalkan star-nya.
+        # Kalau belum, tambahkan star.
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+
+    return redirect("main:show_projects")
