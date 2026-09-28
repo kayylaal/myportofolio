@@ -72,6 +72,10 @@ def show_experiences(request):
 
 @login_required(login_url="/login/")
 def create_project(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    
     form = ProjectForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -88,6 +92,9 @@ def create_project(request):
 
 @login_required(login_url="/login/")
 def update_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     project = get_object_or_404(Project, pk=project_id)
     form = ProjectForm(request.POST or None, instance=project)
 
@@ -106,6 +113,9 @@ def update_project(request, project_id):
 
 @login_required(login_url="/login/")
 def create_socialworks(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     form = SocialWorkForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -122,6 +132,9 @@ def create_socialworks(request):
 
 @login_required(login_url="/login/")
 def update_socialworks(request, socialwork_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
     # instance agar form mengedit data yang sudah ada
     form = SocialWorkForm(request.POST or None, instance=socialwork)
@@ -194,6 +207,9 @@ def get_socialworks_json(request):
 
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
@@ -205,6 +221,9 @@ def delete_project(request, project_id):
 
 @login_required(login_url="/login/")
 def delete_socialworks(request, socialwork_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     socialwork = get_object_or_404(SocialWork, pk=socialwork_id)
 
     if request.method == "POST":
@@ -213,3 +232,17 @@ def delete_socialworks(request, socialwork_id):
         return redirect("main:show_socialworks")
 
     return redirect("main:show_socialworks")
+
+@login_required(login_url="/login/")
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        # Kalau akun ini sudah pernah memberi star, batalkan star-nya.
+        # Kalau belum, tambahkan star.
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+
+    return redirect("main:show_projects")
