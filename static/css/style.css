@@ -220,6 +220,15 @@ h1, .brand {
     align-self: flex-end;
 }
 
+.last-login {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+    margin-right: -0.25em;
+    align-self: flex-end;
+    text-align: right;
+}
+
 .social-links {
     display: flex;
     flex-direction: column;
