@@ -66,6 +66,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                "django.template.context_processors.debug",
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -155,3 +156,6 @@ MAILERS = {
 }
 
 CSRF_TRUSTED_ORIGINS = ["https://kayla-kirana-myportofolio.pws.cs.ui.ac.id"]
+
+# pakai BigAutoField biar tidak muncul warning DEFAULT_AUTO_FIELD (feedback asdos tugas 3)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
