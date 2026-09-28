@@ -21,6 +21,10 @@ class SocialWork(models.Model):
     photo = models.URLField(blank=True, null=True)
     # tahun kegiatan, integer biar tipe datanya tidak string semua
     year = models.PositiveIntegerField(blank=True, null=True)
+    # field buat star, manytomany karena 1 field bisa beberapa user
+    starred_by = models.ManyToManyField(
+            User, related_name="starred_socialworks", blank=True
+        )
 
     def __str__(self):
         return self.title
