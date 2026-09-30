@@ -17,6 +17,7 @@ from main.views import (
     logout_user,
     toggle_star,
     toggle_socialwork_star,
+    create_project_ajax,
 )
 
 app_name = "main"
@@ -40,4 +41,5 @@ urlpatterns = [
     path("logout/", logout_user, name="logout"),
     path("projects/<int:project_id>/star/", toggle_star, name="toggle_star"),
     path("socialworks/<int:socialwork_id>/star/", toggle_socialwork_star, name="toggle_socialwork_star"),
+    path("projects/add-ajax/", create_project_ajax, name="create_project_ajax"),
 ]
