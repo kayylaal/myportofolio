@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from main.models import Project, SocialWork
 from main.forms import ProjectForm, SocialWorkForm
@@ -160,14 +160,9 @@ def update_socialworks(request, socialwork_id):
 
 def show_projects(request):
     title_query = request.GET.get("title", "").strip()
-    json_response = get_projects_json(request)
-    project_list = []
-    for obj in serializers.deserialize("json", json_response.content):
-        project_list.append(obj.object)
 
     context = {
         "name": "Kayla",
-        "project_list": project_list,
         "title_query": title_query,
         "is_editor": is_editor(request.user),
     }
@@ -190,15 +185,34 @@ def show_socialworks(request):
     }
     return render(request, "socialworks.html", context)
 
+
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
-    projects = Project.objects.all()
+    projects = Project.objects.prefetch_related('starred_by').all()
 
     if title_query:
         projects = projects.filter(title__icontains=title_query)
-        
-    projects_json = serializers.serialize("json", projects, use_natural_foreign_keys=True)
-    return HttpResponse(projects_json, content_type="application/json")
+
+    data = []
+    for project in projects:
+        starred_users = project.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+
+        data.append({
+            "pk": str(project.id),
+            "fields": {
+                "title": project.title,
+                "description": project.description,
+                "link": project.link,
+                "thumbnail": project.thumbnail,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 
 def get_socialworks_json(request):
