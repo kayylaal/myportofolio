@@ -9,6 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 import datetime
 from django.contrib.auth.decorators import login_required 
 from django.core.exceptions import PermissionDenied       
+from django.views.decorators.http import require_POST
 
 def is_editor(user):
     return user.is_authenticated and (
@@ -165,6 +166,7 @@ def show_projects(request):
         "name": "Kayla",
         "title_query": title_query,
         "is_editor": is_editor(request.user),
+        "form": ProjectForm(),
     }
     return render(request, "projects.html", context)
 
@@ -279,3 +281,22 @@ def toggle_socialwork_star(request, socialwork_id):
             socialwork.starred_by.add(request.user)
 
     return redirect("main:show_socialworks")
+
+
+@require_POST
+def create_project_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
+            status=403,
+        )
+
+    form = ProjectForm(request.POST)
+    if form.is_valid():
+        project = form.save()
+        return JsonResponse(
+            {"message": "Proyek berhasil ditambahkan.", "pk": str(project.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
