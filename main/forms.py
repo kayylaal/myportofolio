@@ -1,9 +1,11 @@
 from django.forms import ModelForm, TextInput, Textarea, URLInput, NumberInput
-
+from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
 from main.models import Project, SocialWork
 
 class ProjectForm(ModelForm):
     class Meta:
+        
         model = Project
         fields = [
             "title",
@@ -43,6 +45,15 @@ class ProjectForm(ModelForm):
                 }
             ),
         }
+
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise ValidationError("Nama proyek tidak boleh hanya berisi tag HTML.")
+        return title
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data["description"]).strip()
 
 # form kegiatan sosial, year pakai NumberInput
 class SocialWorkForm(ModelForm):
