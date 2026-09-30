@@ -165,6 +165,7 @@ def show_projects(request):
         "name": "Kayla",
         "title_query": title_query,
         "is_editor": is_editor(request.user),
+        "form": ProjectForm(),
     }
     return render(request, "projects.html", context)
 
