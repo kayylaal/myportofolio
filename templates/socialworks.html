@@ -9,62 +9,139 @@
                 <p class="section-kicker">Social Works I've Been A Part Of</p>
                 <div class="project-header">
                     <h1>Social Works</h1>
-                    <!-- kalo superuser bisa add -->
-                    {% if user.is_superuser %}
-                    <a href="{% url 'main:create_socialworks' %}"
-                       class="button project-add-button">
-                        <span aria-hidden="true">+</span>
-                        Add Social Work
-                    </a>
-                    {% endif %}
                 </div>
-                <form method="get"
-                      action="{% url 'main:show_socialworks' %}"
-                      class="project-search">
-                    <input type="search"
-                           name="title"
-                           value="{{ title_query }}"
-                           placeholder="Search a social work..."
-                           class="project-search__input"
-                           aria-label="Search a social work...">
-                    <button type="submit" class="button">Search</button>
-                </form>
-                <div class="experience-grid project-grid">
-                    {% for socialwork in socialwork_list %}
-                        <article class="experience-card">
-                            {% if socialwork.photo %}
-                                <img src="{{ socialwork.photo }}"
-                                     alt="Gambar {{ socialwork.title }}"
-                                     class="project-image">
-                            {% endif %}
-                            <h2>{{ socialwork.title }}</h2>
-                            {% if socialwork.year %}
-                                <p class="experience-status">{{ socialwork.year }}</p>
-                            {% endif %}
-                            <p class="experience-description">{{ socialwork.description }}</p>
-                            <div class="project-card-actions">
-                                <div class="project-actions">
-                                    {% include "components/socialwork_star.html" with socialwork=socialwork %}
-                                    <!-- kalo superuser atau editor bisa update -->
-                                    {% if user.is_superuser or is_editor %}
-                                    <a href="{% url 'main:update_socialworks' socialwork.id %}" class="button button-secondary">Edit</a>
-                                    {% endif %}
-                                    <!-- kalo superuser bisa delete (tombolnya muncul) -->
-                                    {% if user.is_superuser %}
-                                    {% include "components/socialwork_delete_modal.html" with sw=socialwork %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        {% if title_query %}
-                            <p class="empty-state">No social work with that name...</p>
-                        {% else %}
-                            <p class="empty-state">No social work yet.</p>
-                        {% endif %}
-                    {% endfor %}
+
+                <!-- Loading State -->
+                <div id="loading" class="empty-state hide">
+                    <p>Loading social works...</p>
                 </div>
+
+                <!-- Error State -->
+                <div id="error" class="empty-state hide">
+                    <p>Fail to load social works data. Please try again.</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty" class="empty-state hide">
+                    <p>No social work found.</p>
+                </div>
+
+                <!-- Grid -->
+                <div id="grid" class="experience-grid project-grid hide"></div>
             </div>
         </section>
     </main>
+
+    <script>
+    const BASE_SOCIALWORKS_ENDPOINT = "{% url 'main:get_socialworks_json' %}";
+    const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+    const IS_EDITOR = "{{ is_editor|yesno:'true,false' }}" === "true";
+
+    const loadingState = document.getElementById('loading');
+    const errorState = document.getElementById('error');
+    const emptyState = document.getElementById('empty');
+    const gridContainer = document.getElementById('grid');
+
+    function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+        loadingState.classList.toggle('hide', !showLoading);
+        errorState.classList.toggle('hide', !showError);
+        emptyState.classList.toggle('hide', !showEmpty);
+        gridContainer.classList.toggle('hide', !showGrid);
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function buildSocialWorkCardElement(item) {
+        const sw = item.fields;
+        const swId = item.pk;
+
+        const articleElement = document.createElement('article');
+        articleElement.className = 'experience-card';
+
+        const imageHtml = sw.photo
+            ? `<img src="${escapeHtml(sw.photo)}" alt="Gambar ${escapeHtml(sw.title)}" class="project-image">`
+            : '';
+
+        const yearHtml = sw.year
+            ? `<p class="experience-status">${escapeHtml(sw.year)}</p>`
+            : '';
+
+        const editUrl = "{% url 'main:update_socialworks' 999999 %}".replace('999999', swId);
+        const deleteUrl = "{% url 'main:delete_socialworks' 999999 %}".replace('999999', swId);
+        const starUrl = "{% url 'main:toggle_socialwork_star' 999999 %}".replace('999999', swId);
+
+        const editHtml = (IS_SUPERUSER || IS_EDITOR)
+            ? `<a href="${editUrl}" class="button button-secondary">Edit</a>`
+            : '';
+
+        const deleteHtml = IS_SUPERUSER
+            ? `<form method="post" action="${deleteUrl}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus social work ini?');">Hapus</button>
+            </form>`
+            : '';
+
+        const isStarredClass = sw.is_starred ? " is-starred" : "";
+        const starText = sw.is_starred ? "Unstar" : "Star";
+        const starTitle = sw.star_count > 0
+            ? `Dibintangi oleh ${escapeHtml(sw.starred_by_names)}`
+            : "Jadilah yang pertama memberi star";
+
+        articleElement.innerHTML = `
+            ${imageHtml}
+            <h2>${escapeHtml(sw.title)}</h2>
+            ${yearHtml}
+            <p class="experience-description">${escapeHtml(sw.description)}</p>
+            <div class="project-card-actions">
+                <div class="project-actions">
+                    ${editHtml}
+                    <form method="post" action="${starUrl}" class="star-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="button button-star${isStarredClass}"
+                                title="${starTitle}">
+                            <span aria-hidden="true">★</span>
+                            ${starText}
+                            <span class="star-count">${sw.star_count}</span>
+                        </button>
+                    </form>
+                    ${deleteHtml}
+                </div>
+            </div>
+        `;
+        return articleElement;
+    }
+
+    async function fetchSocialWorks() {
+        try {
+            displayPageSection({ showLoading: true });
+            const response = await fetch(BASE_SOCIALWORKS_ENDPOINT, {
+                headers: { 'Accept': 'application/json' },
+            });
+            if (!response.ok) throw new Error('Failed to fetch data');
+            const data = await response.json();
+            if (data.length === 0) {
+                displayPageSection({ showEmpty: true });
+            } else {
+                gridContainer.innerHTML = '';
+                data.forEach(item => {
+                    gridContainer.appendChild(buildSocialWorkCardElement(item));
+                });
+                displayPageSection({ showGrid: true });
+            }
+        } catch (error) {
+            console.error('Error loading socialworks:', error);
+            displayPageSection({ showError: true });
+        }
+    }
+
+    fetchSocialWorks();
+    </script>
 {% endblock content %}

@@ -172,19 +172,12 @@ def show_projects(request):
 
 
 def show_socialworks(request):
-    title_query = request.GET.get("title", "").strip()
-    # ambil JSON internal lalu kembalikan jadi object untuk template
-    json_response = get_socialworks_json(request)
-    socialwork_list = []
-    for obj in serializers.deserialize("json", json_response.content):
-        socialwork_list.append(obj.object)
-
     context = {
         "name": "Kayla",
-        "socialwork_list": socialwork_list,
-        "title_query": title_query,
         "is_editor": is_editor(request.user),
+        "form": SocialWorkForm(),
     }
+
     return render(request, "socialworks.html", context)
 
 
@@ -225,8 +218,26 @@ def get_socialworks_json(request):
     if title_query:
         socialworks = socialworks.filter(title__icontains=title_query)
 
-    socialworks_json = serializers.serialize("json", socialworks, use_natural_foreign_keys=True)
-    return HttpResponse(socialworks_json, content_type="application/json")
+    data = []
+    for sw in socialworks:
+        starred_users = sw.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+
+        data.append({
+            "pk": str(sw.id),
+            "fields": {
+                "title": sw.title,
+                "description": sw.description,
+                "photo": sw.photo,
+                "year": sw.year,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
