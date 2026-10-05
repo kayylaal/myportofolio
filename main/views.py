@@ -310,4 +310,23 @@ def create_project_ajax(request):
             status=201,
         )
 
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)\
+
+# tambah social work lewat ajax buat superuser
+@require_POST
+def create_socialwork_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan social work."},
+            status=403,
+        )
+
+    form = SocialWorkForm(request.POST)
+    if form.is_valid():
+        socialwork = form.save()
+        return JsonResponse(
+            {"message": "Social work berhasil ditambahkan.", "pk": str(socialwork.id)},
+            status=201,
+        )
+
     return JsonResponse({"errors": form.errors.get_json_data()}, status=400)

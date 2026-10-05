@@ -9,6 +9,14 @@
                 <p class="section-kicker">Social Works I've Been A Part Of</p>
                 <div class="project-header">
                     <h1>Social Works</h1>
+                    {% if user.is_superuser %}
+                    <button type="button"
+                            class="button project-add-button"
+                            popovertarget="add-socialwork-modal">
+                        <span aria-hidden="true">+</span>
+                        Tambah Social Work
+                    </button>
+                    {% endif %}
                 </div>
 
                 <form id="socialwork-search-form" class="project-search">
@@ -41,6 +49,10 @@
             </div>
         </section>
     </main>
+
+    {% if user.is_superuser %}
+        {% include "components/socialwork_form_modal.html" %}
+    {% endif %}
 
     <script>
     const BASE_SOCIALWORKS_ENDPOINT = "{% url 'main:get_socialworks_json' %}";
@@ -180,6 +192,67 @@
         clearTimeout(searchDebounceTimer);
         fetchSocialWorks(searchInput.value.trim());
     });
+
+        const CREATE_SOCIALWORK_ENDPOINT = "{% url 'main:create_socialwork_ajax' %}";
+    const socialworkForm = document.getElementById('socialwork-form');
+
+    // ambil token csrf dari cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function closeSocialworkModal() {
+        document.getElementById("add-socialwork-modal").hidePopover();
+    }
+
+    // kirim form modal pakai fetch
+    async function addSocialWork(event) {
+        event.preventDefault();
+
+        const submitButton = socialworkForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(CREATE_SOCIALWORK_ENDPOINT, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: new FormData(socialworkForm),
+            });
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                socialworkForm.reset();
+                closeSocialworkModal();
+                showToast('Berhasil', 'Social work baru berhasil ditambahkan!', 'success');
+                fetchSocialWorks(searchInput.value.trim());
+            } else {
+                const errorMessages = result.errors
+                    ? Object.values(result.errors).flat().map(error => error.message)
+                    : [result.message || `Terjadi kesalahan (status ${response.status}).`];
+                showToast('Gagal menambahkan social work', errorMessages.join(' '), 'error');
+            }
+        } catch (error) {
+            showToast('Gagal menambahkan social work', 'Tidak dapat terhubung ke server. Silakan coba lagi.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    // modal cuma ada buat superuser, cek dulu biar ga error
+    if (socialworkForm) {
+        socialworkForm.addEventListener('submit', addSocialWork);
+    }
 
     fetchSocialWorks();
     </script>
