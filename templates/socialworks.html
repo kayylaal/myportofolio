@@ -49,6 +49,7 @@
         gridContainer.classList.toggle('hide', !showGrid);
     }
 
+    // cegah xss, jadiin teks biasa
     function escapeHtml(value) {
         return String(value ?? '')
             .replaceAll('&', '&amp;')
@@ -119,6 +120,7 @@
         return articleElement;
     }
 
+    // ambil data pakai fetch
     async function fetchSocialWorks() {
         try {
             displayPageSection({ showLoading: true });

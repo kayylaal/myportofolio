@@ -209,10 +209,10 @@ def get_projects_json(request):
 
     return JsonResponse(data, safe=False)
 
-
+# susun json manual + info star
 def get_socialworks_json(request):
     title_query = request.GET.get("title", "").strip()
-    socialworks = SocialWork.objects.all()
+    socialworks = SocialWork.objects.prefetch_related('starred_by').all()
 
     # filter judul kalau ada query ?title=
     if title_query:
