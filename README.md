@@ -124,3 +124,30 @@ Bagian spesifik yang dibantu AI: memahami maksud soal, memahami cara kerja menam
 Keterbatasan AI + perbaikan manual: ChatGPT terbatas dalam mencari bug yang saya alami, karena tidak terhubung langsung dengan project saya, jadi saat ada error (saya lupa kasih if else di tombol delete project) saya perbaiki sendiri. Untuk tambahan saya juga mengganti2 warna dari template di tutorial.
 
 Chat/log AI: https://chatgpt.com/share/6aba693f-fb94-83ec-be80-730d3993f491
+
+### Tugas 5
+
+Fitur baru: list socialwork via ajax (`fetch` ke `/api/socialworks/` + loading/empty/error), search ajax + debounce 300ms (`?title=`), tambah via modal + `POST /socialworks/add-ajax/` (201/400/403, cek superuser di view, `X-CSRFToken`, refresh tanpa reload), toast sukses/gagal + validasi server, xss aman (`escapeHtml` di js + `strip_tags` di `clean_title/description`).
+
+Setup / cara uji minggu ini:
+1. `./env/bin/python manage.py migrate`
+2. `./env/bin/python manage.py runserver`, buka `/socialworks/` + `/api/socialworks/`
+3. login pakai `kayylaal` (superuser), `testaccount` (editor), `regularuser` (user), logout buat guest
+
+1. Debouncing adalah menunda request sampai user berhenti mengetik, misal pada search bar selama 300ms. Teknik ini penting diterapkan di search ajax agar tidak kirim request tiap satu huruf, jadi lebih hemat server dan ga keload2 terus.
+
+2. `await` itu untuk menunggu `fetch()` selesai dulu baru lanjut. Tanpa `await` yang didapat promise mentah bukan data, `response.ok` / `response.json()` error atau jalan duluan.
+
+3. Serangan XSS adalah serangan di mana ada yang menyelipkan script jahat misal `<img onerror="alert()">` biar jalan di browser target. Lewat ajax/js lebih rentan karena dimasukin via `innerHTML` mentah tanpa auto-escape django template. Maka dari itu, di js dipakai `escapeHtml` dan di server pakai `strip_tags` di `clean_<field>`.
+
+**Dokumentasi & AI Disclosure**
+
+Tools yang dipakai: ChatGPT (untuk klarifikasi dan bantu hal-hal teoritis) dan OpenCode (untuk debugging)
+
+Strategi prompting: minta dijelasin per checklist, coba kerjakan sendiri sesuai tutorial 5, tiap selesai minta dicek sebelum lanjut
+
+Bagian spesifik yang dibantu AI: memahami cara implementasi dari tutorial sebelumnya, kalau ada error minta cek apa yang salah, seperti saat mengisi title kosong di modal yang muncul bukan toast, terus cara testing, dan pertanyaan teori kurang mengerti
+
+Keterbatasan AI + perbaikan manual: untuk mengecek semua edge cases untuk tiap role, dan kadang ada yang ternyata miss aku harus cek manual dan benerin
+
+Chat/log AI: https://chatgpt.com/share/6ac3b3c7-b494-83ec-adca-35962ada107f
