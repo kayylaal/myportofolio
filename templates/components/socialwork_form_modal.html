@@ -21,7 +21,8 @@
         <form id="socialwork-form"
               method="post"
               action="{% url 'main:create_socialworks' %}"
-              class="project-form">
+              class="project-form"
+              novalidate>
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
