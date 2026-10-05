@@ -11,6 +11,16 @@
                     <h1>Social Works</h1>
                 </div>
 
+                <form id="socialwork-search-form" class="project-search">
+                    <input type="search"
+                        id="search-input"
+                        name="title"
+                        placeholder="Search a social work..."
+                        class="project-search__input"
+                        aria-label="Search a social work...">
+                    <button type="submit" class="button">Search</button>
+                </form>
+
                 <!-- Loading State -->
                 <div id="loading" class="empty-state hide">
                     <p>Loading social works...</p>
@@ -120,12 +130,19 @@
         return articleElement;
     }
 
+    let socialworksAbortController;
+
     // ambil data pakai fetch
-    async function fetchSocialWorks() {
+    async function fetchSocialWorks(searchQuery = "") {
+        if (socialworksAbortController) socialworksAbortController.abort();
+        socialworksAbortController = new AbortController();
+
         try {
             displayPageSection({ showLoading: true });
-            const response = await fetch(BASE_SOCIALWORKS_ENDPOINT, {
+            const url = searchQuery ? `${BASE_SOCIALWORKS_ENDPOINT}?title=${encodeURIComponent(searchQuery)}` : BASE_SOCIALWORKS_ENDPOINT;
+            const response = await fetch(url, {
                 headers: { 'Accept': 'application/json' },
+                signal: socialworksAbortController.signal,
             });
             if (!response.ok) throw new Error('Failed to fetch data');
             const data = await response.json();
@@ -139,10 +156,30 @@
                 displayPageSection({ showGrid: true });
             }
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error('Error loading socialworks:', error);
             displayPageSection({ showError: true });
         }
     }
+
+    const searchForm = document.getElementById('socialwork-search-form');
+    const searchInput = document.getElementById('search-input');
+    let searchDebounceTimer;
+
+    // cari setelah berhenti ngetik 300ms
+    searchInput.addEventListener("input", function() {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(function() {
+            fetchSocialWorks(searchInput.value.trim());
+        }, 300);
+    });
+
+    // cegah reload pas enter
+    searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        clearTimeout(searchDebounceTimer);
+        fetchSocialWorks(searchInput.value.trim());
+    });
 
     fetchSocialWorks();
     </script>
